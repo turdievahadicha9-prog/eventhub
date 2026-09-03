@@ -38,7 +38,7 @@ class EventSerializer(serializers.ModelSerializer):
     def get_average_rating(self, obj):
         reviews = obj.reviews.all()
 
-        if not reviews:
+        if not reviews.exists():
             return 0
 
         total = sum(review.rating for review in reviews)
