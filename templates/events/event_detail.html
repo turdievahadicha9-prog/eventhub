@@ -1,10 +1,124 @@
-<!DOCTYPE html>
-<html lang="en">
+{% load static %}
+
+<!DOCTYPE html><html lang="ky">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>{{ event.title }} — EventHub</title>
+
+<link rel="stylesheet" href="{% static 'style.css' %}">
+
+</head><body><header class="navbar">
+    <div class="logo">
+        🎉 EventHub
+    </div><nav class="nav-links">
+    <a href="/">Башкы бет</a>
+    <a href="/api/events/">Иш-чаралар</a>
+    <a href="/api/categories/">Категориялар</a>
+    <a href="/swagger/">Swagger</a>
+</nav>
+
+</header><section class="section event-detail"><a href="/" class="back-link">
+    ← Башкы бетке кайтуу
+</a>
+
+<div class="detail-card">
+
+    {% if event.image %}
+        <img
+            src="{{ event.image.url }}"
+            alt="{{ event.title }}"
+            class="detail-image"
+        >
+    {% else %}
+        <div class="event-placeholder detail-placeholder">
+            🎉
+        </div>
+    {% endif %}
+
+
+    <div class="detail-content">
+
+        <span class="event-category">
+            {{ event.category }}
+        </span>
+
+        <h1>
+            {{ event.title }}
+        </h1>
+
+        <p class="detail-description">
+            {{ event.description }}
+        </p>
+
+
+        <div class="detail-info">
+
+            <div>
+                <strong>📅 Дата</strong>
+                <span>{{ event.date }}</span>
+            </div>
+
+            <div>
+                <strong>📍 Жайгашкан жери</strong>
+                <span>{{ event.location }}</span>
+            </div>
+
+            <div>
+                <strong>💰 Баасы</strong>
+                <span>{{ event.price }} сом</span>
+            </div>
+
+        </div>
+
+
+        <div class="reviews-section">
+
+            <h2>⭐ Пикирлер</h2>
+
+            {% for review in event.reviews.all %}
+
+                <div class="review-card">
+
+                    <h3>{{ review.name }}</h3>
+
+                    <p>⭐ {{ review.rating }}/5</p>
+
+                    <p>
+                        {{ review.comment }}
+                    </p>
+
+                </div>
+
+            {% empty %}
+
+                <p>
+                    Азырынча пикирлер жок.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+
+        <a href="/" class="btn">
+            ← Артка кайтуу
+        </a>
+
+    </div>
+
+</div>
+
+</section><footer class="footer"><div class="logo">
+    🎉 EventHub
+</div>
+
+<p>
+    Иш-чараларды табуунун заманбап жолу.
+</p>
+
+<p class="copyright">
+    © 2026 EventHub. Бардык укуктар корголгон.
+</p>
+
+</footer></body>
 </html>
