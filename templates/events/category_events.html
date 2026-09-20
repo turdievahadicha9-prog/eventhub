@@ -1,0 +1,168 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ category.name }} — EventHub</title>
+
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+        🎉 EventHub
+    </div>
+
+    <nav class="nav-links">
+        <a href="{% url 'main-home' %}">Башкы бет</a>
+        <a href="{% url 'main-home' %}#events">Иш-чаралар</a>
+        <a href="{% url 'main-home' %}#categories">Категориялар</a>
+        <a href="/swagger/">Swagger</a>
+    </nav>
+
+</header>
+
+
+<section class="section">
+
+    <a href="{% url 'main-home' %}" class="back-link">
+        ← Башкы бетке кайтуу
+    </a>
+
+    <div class="section-header">
+
+        <div>
+            <span class="section-label">
+                📌 КАТЕГОРИЯ
+            </span>
+
+            <h1>{{ category.name }}</h1>
+
+            <p>
+                Бул категориядагы бардык иш-чаралар
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="events-grid">
+
+        {% for event in events %}
+
+        <article class="event-card">
+
+            {% if event.image %}
+
+                <img
+                    src="{{ event.image.url }}"
+                    alt="{{ event.title }}"
+                    class="event-image"
+                >
+
+            {% else %}
+
+                <div class="event-placeholder">
+                    🎉
+                </div>
+
+            {% endif %}
+
+
+            <div class="event-card-content">
+
+                <span class="event-category">
+                    {{ event.category.name }}
+                </span>
+
+                <h3>
+                    {{ event.title }}
+                </h3>
+
+                <p>
+                    {{ event.description|truncatechars:120 }}
+                </p>
+
+
+                <div class="event-info">
+
+                    <span>
+                        📅 {{ event.date|date:"d.m.Y · H:i" }}
+                    </span>
+
+                    <span>
+                        📍 {{ event.location.name }}
+                    </span>
+
+                </div>
+
+
+                <div class="event-bottom">
+
+                    <strong>
+
+                        {% if event.price == 0 %}
+                            Акысыз
+                        {% else %}
+                            {{ event.price }} сом
+                        {% endif %}
+
+                    </strong>
+
+
+                    <a
+                        href="{% url 'event-detail' event.pk %}"
+                        class="btn"
+                    >
+                        Толук көрүү →
+                    </a>
+
+                </div>
+
+            </div>
+
+        </article>
+
+        {% empty %}
+
+        <div class="empty-events">
+
+            <div>😔</div>
+
+            <h3>
+                Бул категорияда азырынча иш-чара жок
+            </h3>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<footer class="footer">
+
+    <div class="logo">
+        🎉 EventHub
+    </div>
+
+    <p>
+        Иш-чараларды табуунун заманбап жолу.
+    </p>
+
+    <p class="copyright">
+        © 2026 EventHub. Бардык укуктар корголгон.
+    </p>
+
+</footer>
+
+</body>
+</html>

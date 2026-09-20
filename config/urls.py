@@ -14,6 +14,7 @@ from drf_spectacular.views import (
 
 
 urlpatterns = [
+
     # Башкы бет
     path("", home, name="home"),
 
@@ -23,7 +24,7 @@ urlpatterns = [
     # API
     path("api/", include("events.urls")),
 
-    # API Schema
+    # OpenAPI
     path(
         "api/schema/",
         SpectacularAPIView.as_view(),
@@ -51,6 +52,7 @@ urlpatterns = [
 
 
 if settings.DEBUG:
+
     urlpatterns += static(
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT,

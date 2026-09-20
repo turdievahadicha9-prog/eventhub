@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from .models import Category, Location, Event, Review
 
 
@@ -14,9 +15,22 @@ class LocationSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = "__all__"
+
+
 class EventSerializer(serializers.ModelSerializer):
-    average_rating = serializers.SerializerMethodField()
-    reviews_count = serializers.SerializerMethodField()
+    category_name = serializers.CharField(
+        source="category.name",
+        read_only=True
+    )
+
+    location_name = serializers.CharField(
+        source="location.name",
+        read_only=True
+    )
 
     class Meta:
         model = Event
@@ -25,30 +39,11 @@ class EventSerializer(serializers.ModelSerializer):
             "title",
             "description",
             "category",
+            "category_name",
             "location",
+            "location_name",
             "date",
             "price",
             "image",
             "created_at",
-            "average_rating",
-            "reviews_count",
         ]
-        read_only_fields = ["average_rating", "reviews_count"]
-
-    def get_average_rating(self, obj):
-        reviews = obj.reviews.all()
-
-        if not reviews.exists():
-            return 0
-
-        total = sum(review.rating for review in reviews)
-        return round(total / reviews.count(), 1)
-
-    def get_reviews_count(self, obj):
-        return obj.reviews.count()
-
-
-class ReviewSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Review
-        fields = "__all__"

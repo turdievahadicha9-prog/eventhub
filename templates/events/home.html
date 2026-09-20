@@ -4,65 +4,138 @@
 <html lang="ky">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EventHub KG — Кыргызстандагы жаңылыктар</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>EventHub KG</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'style.css' %}"
+    >
 </head>
 
 <body>
 
-<header class="header">
-    <div class="container header-inner">
+<header class="navbar">
+    <div class="container nav-inner">
 
-        <a href="{% url 'home' %}" class="logo">
-            <span class="logo-symbol">✦</span>
-            EventHub
-            <small>KG</small>
+        <a href="/" class="logo">
+            ✦ EventHub <span>KG</span>
         </a>
 
         <nav>
-            <a href="{% url 'home' %}">Башкы бет</a>
+            <a href="/" class="active">Башкы бет</a>
             <a href="#events">Жаңылыктар</a>
             <a href="#categories">Категориялар</a>
             <a href="/swagger/">Swagger</a>
         </nav>
 
+        <a href="#events" class="nav-action">
+            Иш-чаралар
+        </a>
+
     </div>
 </header>
 
 
-<section class="hero">
+<main>
 
-    <div class="container hero-inner">
+    <!-- HERO -->
 
-        <div class="hero-text">
+    <section class="hero">
 
-            <div class="location-badge">
-                📍 КЫРГЫЗСТАН
+        <div class="container hero-grid">
+
+            <div class="hero-content">
+
+                <div class="eyebrow">
+                    📍 КЫРГЫЗСТАН
+                </div>
+
+                <h1>
+                    Кыргызстанда кандай
+                    <span>жаңылыктар?</span>
+                </h1>
+
+                <p>
+                    Кыргызстандагы кызыктуу жаңылыктарды,
+                    концерттерди, спорттук мелдештерди,
+                    билим берүү иш-чараларын жана башка
+                    окуяларды бир жерден тап.
+                </p>
+
+                <div class="hero-actions">
+
+                    <a href="#events" class="btn-red">
+                        Жаңылыктарды көрүү
+                    </a>
+
+                    <a href="#categories" class="btn-outline">
+                        Категориялар
+                    </a>
+
+                </div>
+
             </div>
 
-            <h1>
-                Кыргызстанда
-                <span>кандай жаңылыктар?</span>
-            </h1>
 
-            <p>
-                Кыргызстандагы кызыктуу жаңылыктарды,
-                концерттерди, спорттук мелдештерди,
-                билим берүү иш-чараларын жана башка
-                окуяларды бир жерден тап.
-            </p>
+            <div class="hero-card">
 
-            <form method="GET"
-                  action="{% url 'home' %}"
-                  class="search-box">
+                <div class="hero-icon">
+                    🎉
+                </div>
 
-                <span>🔎</span>
+                <div class="hero-card-title">
+                    EventHub KG
+                </div>
+
+                <p>
+                    Кыргызстандагы кызыктуу
+                    иш-чараларды жана жаңылыктарды
+                    бир жерден табыңыз.
+                </p>
+
+                <div class="stats">
+
+                    <div>
+                        <strong>{{ events|length }}</strong>
+                        <small>Иш-чара</small>
+                    </div>
+
+                    <div>
+                        <strong>{{ categories|length }}</strong>
+                        <small>Категория</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SEARCH -->
+
+    <section class="search-section">
+
+        <div class="container">
+
+            <form
+                method="get"
+                action="/"
+                class="search-box"
+            >
 
                 <input
                     type="text"
                     name="q"
-                    value="{{ query }}"
+                    value="{{ request.GET.q }}"
                     placeholder="Жаңылык, категория же жер изде..."
                 >
 
@@ -72,323 +145,259 @@
 
             </form>
 
-            <div class="hero-info">
+        </div>
+
+    </section>
+
+
+    <!-- CATEGORIES -->
+
+    <section
+        class="section"
+        id="categories"
+    >
+
+        <div class="container">
+
+            <div class="section-heading">
 
                 <div>
-                    <strong>{{ events|length }}</strong>
-                    <span>Жаңылык</span>
+                    <small>EVENTHUB KG</small>
+
+                    <h2>
+                        Категориялар
+                    </h2>
                 </div>
-
-                <div>
-                    <strong>{{ categories|length }}</strong>
-                    <span>Категория</span>
-                </div>
-
-                <div>
-                    <strong>{{ locations|length }}</strong>
-                    <span>Жер</span>
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="hero-card">
-
-            <div class="hero-card-top">
-                <span>EVENTHUB KG</span>
-                <span>2026</span>
-            </div>
-
-            <div class="hero-pattern">
-                ✦
-            </div>
-
-            <div class="hero-card-bottom">
-                <strong>КЫРГЫЗСТАН</strong>
-                <span>NEWS & EVENTS</span>
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<section class="section" id="categories">
-
-    <div class="container">
-
-        <div class="section-heading">
-
-            <div>
-                <span>EVENTHUB</span>
-                <h2>Категориялар</h2>
-            </div>
-
-            <p>Өзүңө кызыктуу багытты танда</p>
-
-        </div>
-
-
-        <div class="category-grid">
-
-            {% for category in categories %}
-
-            <a href="{% url 'category-events' category.pk %}"
-               class="category-card">
-
-                <div class="category-icon">
-
-                    {% if "Concert" in category.name %}
-                        🎵
-                    {% elif "Sport" in category.name %}
-                        ⚽
-                    {% elif "Education" in category.name %}
-                        📚
-                    {% else %}
-                        ✦
-                    {% endif %}
-
-                </div>
-
-                <div class="category-content">
-
-                    <span>0{{ forloop.counter }}</span>
-
-                    <h3>{{ category.name }}</h3>
-
-                    <p>Жаңылыктарды көрүү</p>
-
-                </div>
-
-                <div class="category-arrow">
-                    →
-                </div>
-
-            </a>
-
-            {% empty %}
-
-            <p>Категориялар азырынча жок.</p>
-
-            {% endfor %}
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<section class="section events" id="events">
-
-    <div class="container">
-
-        <div class="section-heading">
-
-            <div>
-                <span>КЫРГЫЗСТАН</span>
-                <h2>Акыркы жаңылыктар</h2>
-            </div>
-
-            <div class="event-total">
-                <strong>{{ events|length }}</strong>
-                <span>EVENTS</span>
-            </div>
-
-        </div>
-
-
-        {% if query %}
-
-        <div class="search-result">
-            🔎 "{{ query }}" боюнча издөө жыйынтыгы
-        </div>
-
-        {% endif %}
-
-
-        <div class="events-grid">
-
-            {% for event in events %}
-
-            <article class="event-card">
-
-                <div class="event-image">
-
-                    {% if event.image %}
-
-                    <img
-                        src="{{ event.image.url }}"
-                        alt="{{ event.title }}"
-                    >
-
-                    {% else %}
-
-                    <div class="no-image">
-                        ✦
-                    </div>
-
-                    {% endif %}
-
-                    <span class="event-tag">
-                        {{ event.category.name }}
-                    </span>
-
-                </div>
-
-
-                <div class="event-body">
-
-                    <div class="event-date">
-                        📅 {{ event.date|date:"d.m.Y · H:i" }}
-                    </div>
-
-                    <h3>
-                        {{ event.title }}
-                    </h3>
-
-                    <p>
-                        {{ event.description|truncatewords:20 }}
-                    </p>
-
-                    <div class="event-meta">
-
-                        <span>
-                            📍 {{ event.location.name }}
-                        </span>
-
-                        <strong>
-
-                            {% if event.price %}
-                                {{ event.price }} сом
-                            {% else %}
-                                Акысыз
-                            {% endif %}
-
-                        </strong>
-
-                    </div>
-
-
-                    <a
-                        href="{% url 'event-detail' event.pk %}"
-                        class="event-button"
-                    >
-                        Толук көрүү
-                        <span>→</span>
-                    </a>
-
-                </div>
-
-            </article>
-
-            {% empty %}
-
-            <div class="empty-events">
-
-                <div>🔎</div>
-
-                <h3>Жаңылык табылган жок</h3>
 
                 <p>
-                    Башка сөз менен издеп көрүңүз.
+                    Өзүңө кызыктуу багытты танда
                 </p>
 
-                <a href="{% url 'home' %}">
-                    Бардык жаңылыктар
+            </div>
+
+
+            <div class="categories-grid">
+
+                {% for category in categories %}
+
+                    <a
+                        href="?q={{ category.name }}"
+                        class="category-card"
+                    >
+
+                        <div class="category-icon">
+                            🎯
+                        </div>
+
+                        <h3>
+                            {{ category.name }}
+                        </h3>
+
+                        <span>
+                            Көрүү →
+                        </span>
+
+                    </a>
+
+                {% empty %}
+
+                    <div class="empty-events">
+
+                        <div class="empty-icon">
+                            📂
+                        </div>
+
+                        <h3>
+                            Категориялар азырынча жок.
+                        </h3>
+
+                        <p>
+                            Жакында жаңы категориялар кошулат.
+                        </p>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- EVENTS -->
+
+    <section
+        class="events-section"
+        id="events"
+    >
+
+        <div class="container">
+
+            <div class="section-heading">
+
+                <div>
+                    <small>EVENTS</small>
+
+                    <h2>
+                        Акыркы жаңылыктар
+                    </h2>
+                </div>
+
+                <p>
+                    Кыргызстандагы акыркы иш-чаралар
+                </p>
+
+            </div>
+
+
+            <div class="events-grid">
+
+                {% for event in events %}
+
+                    <article class="event-card">
+
+                        <div class="event-image">
+
+                            {% if event.image %}
+
+                                <img
+                                    src="{{ event.image.url }}"
+                                    alt="{{ event.title }}"
+                                >
+
+                            {% else %}
+
+                                <div class="no-image">
+                                    🎉
+                                </div>
+
+                            {% endif %}
+
+
+                            <div class="event-badge">
+                                {{ event.category.name }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="event-content">
+
+                            <div class="event-date">
+                                📅 {{ event.date|date:"d.m.Y H:i" }}
+                            </div>
+
+                            <h3>
+                                {{ event.title }}
+                            </h3>
+
+                            <p>
+                                {{ event.description|truncatewords:20 }}
+                            </p>
+
+                            <div class="event-location">
+                                📍 {{ event.location.name }}
+                            </div>
+
+
+                            <div class="event-footer">
+
+                                <strong>
+                                    {% if event.price %}
+                                        {{ event.price }} сом
+                                    {% else %}
+                                        Акысыз
+                                    {% endif %}
+                                </strong>
+
+                                <a
+                                    href="/api/events/{{ event.id }}/"
+                                    class="details-btn"
+                                >
+                                    Толук көрүү →
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                {% empty %}
+
+                    <div class="empty-events">
+
+                        <div class="empty-icon">
+                            🔎
+                        </div>
+
+                        <h3>
+                            Иш-чаралар табылган жок
+                        </h3>
+
+                        <p>
+                            Башка сөз менен издеп көрүңүз.
+                        </p>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CTA -->
+
+    <section class="cta-section">
+
+        <div class="container">
+
+            <div class="cta-box">
+
+                <div>
+
+                    <small>
+                        EVENTHUB KG
+                    </small>
+
+                    <h2>
+                        Кийинки иш-чараңды тап!
+                    </h2>
+
+                </div>
+
+                <a
+                    href="#events"
+                    class="btn-red"
+                >
+                    Көрүү →
                 </a>
 
             </div>
 
-            {% endfor %}
-
         </div>
 
-    </div>
+    </section>
 
-</section>
-
-
-<section class="section">
-
-    <div class="container">
-
-        <div class="section-heading">
-
-            <div>
-                <span>КЫРГЫЗСТАН</span>
-                <h2>Жаңылыктар өтүүчү жерлер</h2>
-            </div>
-
-        </div>
-
-
-        <div class="location-grid">
-
-            {% for location in locations %}
-
-            <a
-                href="{% url 'location-events' location.pk %}"
-                class="location-card"
-            >
-
-                <div class="location-icon">
-                    📍
-                </div>
-
-                <div>
-
-                    <h3>
-                        {{ location.name }}
-                    </h3>
-
-                    <p>
-                        {{ location.address }}
-                    </p>
-
-                </div>
-
-                <span class="location-arrow">
-                    →
-                </span>
-
-            </a>
-
-            {% empty %}
-
-            <p>
-                Жайгашкан жерлер азырынча жок.
-            </p>
-
-            {% endfor %}
-
-        </div>
-
-    </div>
-
-</section>
+</main>
 
 
 <footer>
 
     <div class="container footer-inner">
 
-        <div class="footer-logo">
-            ✦ EventHub
-            <span>KG</span>
-        </div>
-
         <p>
-            Кыргызстандагы кызыктуу жаңылыктар
-            жана иш-чаралар бир жерде.
+            ✦ EventHub KG © 2026
         </p>
 
         <span>
-            © 2026 EventHub KG
+            Кыргызстан News & Events
         </span>
 
     </div>

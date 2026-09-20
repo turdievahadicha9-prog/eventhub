@@ -1,31 +1,53 @@
 from django.urls import path
+
 from rest_framework.routers import DefaultRouter
 
 from .views import (
     home,
     event_detail,
-    category_events,
-    location_events,
     CategoryViewSet,
     LocationViewSet,
     EventViewSet,
     ReviewViewSet,
 )
 
-# HTML барактар
+
+router = DefaultRouter()
+
+router.register(
+    "categories",
+    CategoryViewSet,
+    basename="category",
+)
+
+router.register(
+    "locations",
+    LocationViewSet,
+    basename="location",
+)
+
+router.register(
+    "events",
+    EventViewSet,
+    basename="event",
+)
+
+router.register(
+    "reviews",
+    ReviewViewSet,
+    basename="review",
+)
+
+
 urlpatterns = [
-    path("", home, name="home"),
-    path("event/<int:pk>/", event_detail, name="event-detail"),
-    path("category/<int:pk>/", category_events, name="category-events"),
-    path("location/<int:pk>/", location_events, name="location-events"),
+
+    path(
+        "event/<int:event_id>/",
+        event_detail,
+        name="event-detail",
+    ),
+
 ]
 
-
-# API
-router = DefaultRouter()
-router.register("categories", CategoryViewSet)
-router.register("locations", LocationViewSet)
-router.register("events", EventViewSet)
-router.register("reviews", ReviewViewSet)
 
 urlpatterns += router.urls

@@ -1,98 +1,74 @@
 from django.shortcuts import render, get_object_or_404
-from django.db.models import Q
-from rest_framework import viewsets
-from rest_framework.filters import SearchFilter
 
-from .models import Category, Location, Event, Review
-from .serializers import (
-    CategorySerializer,
-    LocationSerializer,
-    EventSerializer,
-    ReviewSerializer,
+from rest_framework import viewsets, serializers
+
+from .models import (
+    Category,
+    Location,
+    Event,
+    Review,
 )
 
 
-def home(request):
-    query = request.GET.get("q", "").strip()
+# =====================================================
+# SERIALIZERS
+# =====================================================
 
-    events = Event.objects.select_related("category", "location").all()
+class CategorySerializer(serializers.ModelSerializer):
 
-    if query:
-        events = events.filter(
-            Q(title__icontains=query)
-            | Q(description__icontains=query)
-            | Q(category__name__icontains=query)
-            | Q(location__name__icontains=query)
-        )
-
-    categories = Category.objects.all()
-    locations = Location.objects.all()
-
-    return render(request, "events/home.html", {
-        "events": events,
-        "categories": categories,
-        "locations": locations,
-        "query": query,
-    })
+    class Meta:
+        model = Category
+        fields = "__all__"
 
 
-def event_detail(request, pk):
-    event = get_object_or_404(
-        Event.objects.select_related("category", "location"),
-        pk=pk
-    )
-    reviews = event.reviews.all()
+class LocationSerializer(serializers.ModelSerializer):
 
-    return render(request, "events/event_detail.html", {
-        "event": event,
-        "reviews": reviews,
-    })
+    class Meta:
+        model = Location
+        fields = "__all__"
 
 
-def category_events(request, pk):
-    category = get_object_or_404(Category, pk=pk)
+class EventSerializer(serializers.ModelSerializer):
 
-    events = Event.objects.filter(
-        category=category
-    ).select_related("category", "location")
-
-    return render(request, "events/category_events.html", {
-        "category": category,
-        "events": events,
-    })
+    class Meta:
+        model = Event
+        fields = "__all__"
 
 
-def location_events(request, pk):
-    location = get_object_or_404(Location, pk=pk)
+class ReviewSerializer(serializers.ModelSerializer):
 
-    events = Event.objects.filter(
-        location=location
-    ).select_related("category", "location")
+    class Meta:
+        model = Review
+        fields = "__all__"
 
-    return render(request, "events/location_events.html", {
-        "location": location,
-        "events": events,
-    })
 
+# =====================================================
+# API VIEWSETS
+# =====================================================
 
 class CategoryViewSet(viewsets.ModelViewSet):
+
     queryset = Category.objects.all()
+
     serializer_class = CategorySerializer
 
 
 class LocationViewSet(viewsets.ModelViewSet):
+
     queryset = Location.objects.all()
+
     serializer_class = LocationSerializer
 
 
 class EventViewSet(viewsets.ModelViewSet):
+
     queryset = Event.objects.select_related(
-        "category", "location"
+        "category",
+        "location",
     ).all()
 
     serializer_class = EventSerializer
 
-    filter_backends = [SearchFilter]
     search_fields = [
         "title",
         "description",
@@ -100,7 +76,91 @@ class EventViewSet(viewsets.ModelViewSet):
         "location__name",
     ]
 
+    ordering_fields = [
+        "date",
+        "price",
+        "created_at",
+    ]
+
+    ordering = [
+        "-date",
+    ]
+
 
 class ReviewViewSet(viewsets.ModelViewSet):
+
     queryset = Review.objects.all()
+
     serializer_class = ReviewSerializer
+
+
+# =====================================================
+# HOME PAGE
+# =====================================================
+
+def home(request):
+
+    query = request.GET.get("q", "").strip()
+
+    categories = Category.objects.all()
+
+    events = Event.objects.select_related(
+        "category",
+        "location",
+    ).all().order_by("date")
+
+    if query:
+
+        events = events.filter(
+            title__icontains=query
+        ) | events.filter(
+            description__icontains=query
+        ) | events.filter(
+            category__name__icontains=query
+        ) | events.filter(
+            location__name__icontains=query
+        )
+
+        events = events.distinct()
+
+    context = {
+        "events": events,
+        "categories": categories,
+        "query": query,
+    }
+
+    return render(
+        request,
+        "events/home.html",
+        context,
+    )
+
+
+# =====================================================
+# EVENT DETAIL
+# =====================================================
+
+def event_detail(request, event_id):
+
+    event = get_object_or_404(
+        Event.objects.select_related(
+            "category",
+            "location",
+        ),
+        id=event_id,
+    )
+
+    reviews = Review.objects.filter(
+        event=event
+    ).order_by("-id")
+
+    context = {
+        "event": event,
+        "reviews": reviews,
+    }
+
+    return render(
+        request,
+        "events/event_detail.html",
+        context,
+    )
