@@ -3,6 +3,11 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+# =========================
+# SECURITY
+# =========================
+
 SECRET_KEY = os.environ.get(
     "SECRET_KEY",
     "django-insecure-eventhub-local-key"
@@ -12,6 +17,10 @@ DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 ALLOWED_HOSTS = ["*"]
 
+
+# =========================
+# APPLICATIONS
+# =========================
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -29,10 +38,14 @@ INSTALLED_APPS = [
 ]
 
 
+# =========================
+# MIDDLEWARE
+# =========================
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
 
-    # Render үчүн CSS/JS/images туура берүү
+    # Render'де static файлдарды берүү
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -44,14 +57,29 @@ MIDDLEWARE = [
 ]
 
 
+# =========================
+# URL / WSGI
+# =========================
+
 ROOT_URLCONF = "config.urls"
 
+WSGI_APPLICATION = "config.wsgi.application"
+
+
+# =========================
+# TEMPLATES
+# =========================
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+
+        "DIRS": [
+            BASE_DIR / "templates",
+        ],
+
         "APP_DIRS": True,
+
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.request",
@@ -63,8 +91,9 @@ TEMPLATES = [
 ]
 
 
-WSGI_APPLICATION = "config.wsgi.application"
-
+# =========================
+# DATABASE
+# =========================
 
 DATABASES = {
     "default": {
@@ -74,8 +103,16 @@ DATABASES = {
 }
 
 
+# =========================
+# PASSWORD VALIDATION
+# =========================
+
 AUTH_PASSWORD_VALIDATORS = []
 
+
+# =========================
+# LANGUAGE / TIME
+# =========================
 
 LANGUAGE_CODE = "en-us"
 
@@ -87,7 +124,7 @@ USE_TZ = True
 
 
 # =========================
-# STATIC
+# STATIC FILES
 # =========================
 
 STATIC_URL = "/static/"
@@ -100,18 +137,23 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
 # WhiteNoise
+# Manifest колдонбойбуз, ошондо Render'де
+# CSS/JS файлдарынын hash-ына байланыштуу
+# көйгөй чыкпайт.
+
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
+
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 
 
 # =========================
-# MEDIA
+# MEDIA FILES
 # =========================
 
 MEDIA_URL = "/media/"
@@ -119,34 +161,12 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 
+# =========================
+# DEFAULT PRIMARY KEY
+# =========================
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # =========================
-# DRF
-# =========================
-
-REST_FRAMEWORK = {
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-
-    "DEFAULT_FILTER_BACKENDS": [
-        "django_filters.rest_framework.DjangoFilterBackend",
-        "rest_framework.filters.SearchFilter",
-        "rest_framework.filters.OrderingFilter",
-    ],
-
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
-    ],
-}
-
-
-# =========================
-# SPECTACULAR
-# =========================
-
-SPECTACULAR_SETTINGS = {
-    "TITLE": "EventHub API",
-    "DESCRIPTION": "Кыргызстандагы иш-чаралар API",
-    "VERSION": "1.0.0",
-}
+# DJ
